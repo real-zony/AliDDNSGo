@@ -1,15 +1,18 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"path"
 )
 
 var commandModel CommandModel
+var configModel ConfigurationModel
 
 func main() {
 	initCommandModel()
@@ -26,14 +29,31 @@ func initCommandModel() {
 }
 
 func loadConfig() {
+	var configFile string
 	if *commandModel.FilePath == "" {
 		dir, _ := os.Getwd()
-		fmt.Printf("%s\n", dir)
+		configFile = path.Join(dir, "settings.json")
+	} else {
+		configFile = *commandModel.FilePath
+	}
+
+	// 打开配置文件，并进行反序列化。
+	f, err := os.Open(configFile)
+	if err != nil {
+		log.Fatalf("无法打开文件：%s", err)
+		os.Exit(-1)
+	}
+	defer f.Close()
+	data, _ := ioutil.ReadAll(f)
+
+	if err := json.Unmarshal(data, &configModel); err != nil {
+		log.Fatalf("数据反序列化失败：%s", err)
+		os.Exit(-1)
 	}
 }
 
 func getPublicIp() string {
-	resp, err := http.Get("http://members.3322.org/dyndns/getip")
+	resp, err := http.Get(GetPublicIpUrl)
 	if err != nil {
 		log.Printf("获取公网 IP 出现错误，错误信息：%s", err)
 		os.Exit(-1)

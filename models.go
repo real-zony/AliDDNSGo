@@ -6,14 +6,14 @@ type CommandModel struct {
 }
 
 type ConfigurationModel struct {
-	AccessId   string
-	AccessKey  string
-	MainDomain string
-	SubDomains *[]SubDomainModel
+	AccessId   string            // 阿里云的 Access Id
+	AccessKey  string            // 阿里云的 Access Key
+	MainDomain string            // 需要更新的主域名，例如 sample.com
+	SubDomains *[]SubDomainModel // 需要更新的具体子域名。
 }
 
 type SubDomainModel struct {
-	Type     string
-	Name     string
-	Interval int
+	Type     string // 子域名记录的类型。
+	Name     string `json:"SubDomain"` // 子域名的名称，例如 sub1.sample.com
+	Interval int    // 子域名记录的 TTL 时间，单位是秒。
 }
