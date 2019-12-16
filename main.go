@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -63,4 +64,17 @@ func getPublicIp() string {
 	bytes, _ := ioutil.ReadAll(resp.Body)
 
 	return string(bytes)
+}
+
+func getSubDomains() {
+	client, err := alidns.NewClientWithAccessKey("", configModel.AccessId, configModel.AccessKey)
+	request := alidns.CreateDescribeDomainRecordsRequest()
+
+	request.Scheme = "https"
+	request.Domain = configModel.MainDomain
+
+	_, err = client.DescribeDomainRecords(request)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }

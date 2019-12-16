@@ -1,0 +1,17 @@
+{
+    "AccessId": "AccessId",
+    "AccessKey": "AccessKey",
+    "MainDomain": "example.com",
+    "SubDomains": [
+        {
+            "Type": "A",
+            "SubDomain": "sub1",
+            "Interval": 600
+        },
+        {
+            "Type": "A",
+            "SubDomain": "sub2",
+            "Interval": 600
+        }
+    ]
+}
