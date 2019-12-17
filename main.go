@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/ahmetb/go-linq/v3"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"io/ioutil"
 	"log"
@@ -51,6 +52,8 @@ func loadConfig() {
 		log.Fatalf("数据反序列化失败：%s", err)
 		os.Exit(-1)
 	}
+
+	_ = getSubDomains()
 }
 
 func getPublicIp() string {
@@ -66,15 +69,25 @@ func getPublicIp() string {
 	return string(bytes)
 }
 
-func getSubDomains() {
-	client, err := alidns.NewClientWithAccessKey("", configModel.AccessId, configModel.AccessKey)
+func getSubDomains() []alidns.Record {
+	client, err := alidns.NewClientWithAccessKey("cn-hangzhou", configModel.AccessId, configModel.AccessKey)
+
 	request := alidns.CreateDescribeDomainRecordsRequest()
-
 	request.Scheme = "https"
-	request.Domain = configModel.MainDomain
 
-	_, err = client.DescribeDomainRecords(request)
+	request.DomainName = configModel.MainDomain
+
+	response, err := client.DescribeDomainRecords(request)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
+
+	var queryResult []alidns.Record
+	linq.From(response.DomainRecords.Record).Where(func(c interface{}) bool {
+		return linq.From(*configModel.SubDomains).Select(func(x interface{}) interface{} {
+			return x.(SubDomainModel).Name
+		}).Contains(c.(alidns.Record).RR)
+	}).ToSlice(&queryResult)
+
+	return queryResult
 }
