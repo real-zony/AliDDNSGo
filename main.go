@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"github.com/ahmetb/go-linq/v3"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"io/ioutil"
@@ -11,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 )
 
 var commandModel CommandModel
@@ -20,7 +20,16 @@ func main() {
 	initCommandModel()
 	loadConfig()
 
-	fmt.Println(getPublicIp())
+	publicIp := getPublicIp()
+	subDomains := getSubDomains()
+	for _, sub := range subDomains {
+		if sub.Value != publicIp {
+			sub.Value = publicIp
+			updateSubDomain(&sub)
+		}
+	}
+
+	log.Printf("域名记录更新成功...")
 }
 
 func initCommandModel() {
@@ -52,8 +61,6 @@ func loadConfig() {
 		log.Fatalf("数据反序列化失败：%s", err)
 		os.Exit(-1)
 	}
-
-	_ = getSubDomains()
 }
 
 func getPublicIp() string {
@@ -66,7 +73,7 @@ func getPublicIp() string {
 
 	bytes, _ := ioutil.ReadAll(resp.Body)
 
-	return string(bytes)
+	return strings.Replace(string(bytes), "\n", "", -1)
 }
 
 func getSubDomains() []alidns.Record {
@@ -82,6 +89,7 @@ func getSubDomains() []alidns.Record {
 		log.Println(err.Error())
 	}
 
+	// 过滤符合条件的子域名信息。
 	var queryResult []alidns.Record
 	linq.From(response.DomainRecords.Record).Where(func(c interface{}) bool {
 		return linq.From(*configModel.SubDomains).Select(func(x interface{}) interface{} {
@@ -90,4 +98,20 @@ func getSubDomains() []alidns.Record {
 	}).ToSlice(&queryResult)
 
 	return queryResult
+}
+
+func updateSubDomain(subDomain *alidns.Record) {
+	client, err := alidns.NewClientWithAccessKey("cn-hangzhou", configModel.AccessId, configModel.AccessKey)
+
+	request := alidns.CreateUpdateDomainRecordRequest()
+	request.Scheme = "https"
+	request.RecordId = subDomain.RecordId
+	request.RR = subDomain.RR
+	request.Type = subDomain.Type
+	request.Value = subDomain.Value
+
+	_, err = client.UpdateDomainRecord(request)
+	if err != nil {
+		log.Print(err.Error())
+	}
 }
