@@ -11,6 +11,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 )
 
 var commandModel CommandModel
@@ -20,6 +21,15 @@ func main() {
 	initCommandModel()
 	loadConfig()
 
+	if commandModel.Interval == nil || *commandModel.Interval == 0 {
+		update()
+		return
+	}
+
+	intervalFunction()
+}
+
+func update() {
 	publicIp := getPublicIp()
 	subDomains := getSubDomains()
 	for _, sub := range subDomains {
@@ -30,6 +40,16 @@ func main() {
 	}
 
 	log.Printf("域名记录更新成功...")
+}
+
+func intervalFunction() {
+	tick := time.Tick(time.Second * time.Duration(*commandModel.Interval))
+	for {
+		select {
+		case <-tick:
+			update()
+		}
+	}
 }
 
 func initCommandModel() {
