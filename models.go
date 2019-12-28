@@ -15,5 +15,5 @@ type ConfigurationModel struct {
 type SubDomainModel struct {
 	Type     string // 子域名记录的类型。
 	Name     string `json:"SubDomain"` // 子域名的名称，例如 sub1.sample.com
-	Interval int    // 子域名记录的 TTL 时间，单位是秒。
+	Interval int64  // 子域名记录的 TTL 时间，单位是秒。
 }

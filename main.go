@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"github.com/ahmetb/go-linq/v3"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"io/ioutil"
 	"log"
@@ -34,7 +35,11 @@ func update() {
 	subDomains := getSubDomains()
 	for _, sub := range subDomains {
 		if sub.Value != publicIp {
+			// 更新域名绑定的 IP 地址。
 			sub.Value = publicIp
+			sub.TTL = linq.From(*configModel.SubDomains).FirstWith(func(subDomain interface{}) bool {
+				return subDomain.(SubDomainModel).Name == sub.RR
+			}).(SubDomainModel).Interval
 			updateSubDomain(&sub)
 		}
 	}
@@ -129,6 +134,7 @@ func updateSubDomain(subDomain *alidns.Record) {
 	request.RR = subDomain.RR
 	request.Type = subDomain.Type
 	request.Value = subDomain.Value
+	request.TTL = requests.Integer(subDomain.TTL)
 
 	_, err = client.UpdateDomainRecord(request)
 	if err != nil {
