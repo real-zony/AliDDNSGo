@@ -134,7 +134,7 @@ func updateSubDomain(subDomain *alidns.Record) {
 	request.RR = subDomain.RR
 	request.Type = subDomain.Type
 	request.Value = subDomain.Value
-	request.TTL = requests.Integer(subDomain.TTL)
+	request.TTL = requests.NewInteger64(subDomain.TTL)
 
 	_, err = client.UpdateDomainRecord(request)
 	if err != nil {
