@@ -48,7 +48,7 @@ AliDDNSGo 是基于 Golang 开发的动态 DNS 解析工具，借助于阿里云
 ```
 
 效果图：  
-![1203160-20180722111356778-841949657.png](./READMEPIC/Snipaste_2019-12-12_17-36-21.png)
+![1203160-20180722111356778-841949657.png](https://github.com/GameBelial/AliDDNSNet/blob/master/READMEPIC/Snipaste_2019-12-12_17-36-21.png)
 
 当然如果你有其他的配置文件也可以通过指定 ```-f``` 参数来制定配置文件路径。例如：
 
@@ -56,7 +56,7 @@ AliDDNSGo 是基于 Golang 开发的动态 DNS 解析工具，借助于阿里云
 ./AliCloudDynamicDNS -f ./settings.json
 ```
 
-![](./READMEPIC/Snipaste_2019-12-12_17-38-09.png)
+![](https://github.com/GameBelial/AliDDNSNet/raw/master/READMEPIC/Snipaste_2019-12-12_17-38-09.png)
 
 如果你需要启动自动周期检测的话，请通过 `-i` 参数指定执行周期，单位是秒。
 
@@ -64,7 +64,7 @@ AliDDNSGo 是基于 Golang 开发的动态 DNS 解析工具，借助于阿里云
 ./AliCloudDynamicDNS -f ./settings.json -i 3600
 ```
 
-![](./READMEPIC/Snipaste_2019-12-12_17-38-53.png)
+![](https://github.com/GameBelial/AliDDNSNet/raw/master/READMEPIC/Snipaste_2019-12-12_17-38-53.png)
 
 > **注意：**
 >
@@ -78,14 +78,14 @@ AliDDNSGo 是基于 Golang 开发的动态 DNS 解析工具，借助于阿里云
 
 最后我们来到群晖的 DSM 管理面，打开 **控制面板 -> 任务计划**，添加一个新的任务，例如下图：
 
-![群晖设置图1](./READMEPIC/Snipaste_2019-12-12_17-42-28.png)
+![群晖设置图1](https://github.com/GameBelial/AliDDNSNet/raw/master/READMEPIC/Snipaste_2019-12-12_17-42-28.png)
 
-![群晖设置图2](./READMEPIC/Snipaste_2019-12-12_17-43-54.png)
+![群晖设置图2](https://github.com/GameBelial/AliDDNSNet/raw/master/READMEPIC/Snipaste_2019-12-12_17-43-54.png)
 
-![](./READMEPIC/Snipaste_2019-12-12_17-46-01.png)
+![](https://github.com/GameBelial/AliDDNSNet/raw/master/READMEPIC/Snipaste_2019-12-12_17-46-01.png)
 
 ## 2.下载地址
 
-~~程序打包了 Linux-x64 与 Linux-arm 环境的二进制可执行文件，你可以直接下载对应的压缩包解压到你的路由器或者 NAS 里面进行运行。~~
+程序打包了 Linux-x64 与 Linux-arm 环境的二进制可执行文件，你可以直接下载对应的压缩包解压到你的路由器或者 NAS 里面进行运行。
 
-~~**[下载地址在这儿](https://github.com/GameBelial/AliDDNSNet/releases)**~~
+**[下载地址在这儿](https://github.com/GameBelial/AliDDNSGo/releases)**
