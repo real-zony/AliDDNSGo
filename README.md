@@ -1,4 +1,4 @@
-# 注意！！！
+# ⚠️注意！！！
 **此项目已经封存不再维护，如果 DDNS 工具需要，请转到另一个项目。[AliDDNSNet](https://github.com/real-zony/AliDDNSNet)**
 
 ## 0.简要介绍
