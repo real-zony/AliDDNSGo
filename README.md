@@ -1,3 +1,6 @@
+# 注意！！！
+**此项目已经封存不再维护，如果 DDNS 工具需要，请转到另一个项目。[AliDDNSNet](https://github.com/real-zony/AliDDNSNet)**
+
 ## 0.简要介绍
 
 AliDDNSGo 是基于 Golang 开发的动态 DNS 解析工具，借助于阿里云的 DNS API 来实现域名与动态 IP 的绑定功能。这样你随时就可以通过域名来访问你的设备，而不需要担心 IP 变动的问题。
